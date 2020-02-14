@@ -1,0 +1,64 @@
+version: "3.6"
+
+services:
+  #  The Application
+  app:
+    container_name: laravel_app
+    build:
+      context: ./
+      dockerfile: development/app.dockerfile
+    env_file: ".env.prod"
+    environment:
+      - "DB_HOST=database"
+    restart: always
+
+  queue:
+    container_name: laravel_queue
+    build:
+      context: ./
+      dockerfile: development/app.dockerfile
+    env_file: ".env.prod"
+    environment:
+      - "DB_HOST=database"
+    command: php artisan queue:work --verbose --tries=3 --timeout=90
+    restart: always
+
+  # The Web Server
+  web:
+    container_name: nginx_server
+    build:
+      context: ./
+      dockerfile: development/web.dockerfile
+    ports:
+      - 80:80
+    restart: always
+
+  # The Database
+  database:
+    container_name: mysql_database
+    image: mysql:5.7
+    volumes:
+      - dbdata:/var/lib/mysql
+    environment:
+      - "MYSQL_DATABASE=hr"
+      - "MYSQL_USER=phpmyadmin"
+      - "MYSQL_PASSWORD=phpmyadmin"
+      - "MYSQL_ROOT_PASSWORD=finallyJDBC2017."
+    ports:
+      - 8991:3306
+    restart: always
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: phpmyadmin
+    environment:
+      - PMA_HOST=mysql_database
+    ports:
+      - 8080:80
+    restart: always
+
+volumes:
+  dbdata:
+
+# docker-compose exec app php artisan migrate:fresh --seed
+# docker-compose exec database mysqldump -uphpmyadmin --password="phpmyadmin" hr > $(date +\%F)_hr.sql
