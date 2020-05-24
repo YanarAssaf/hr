@@ -54,7 +54,7 @@ services:
     environment:
       - PMA_HOST=mysql_database
     ports:
-      - 8080:80
+      - 8081:80
     restart: always
 
 volumes:
