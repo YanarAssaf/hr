@@ -25,4 +25,4 @@ If you discover a security vulnerability within App, please send an e-mail to Ya
 
 ## License
 
-This app is open-sourced .
+This app is open-sourced ...
