@@ -13,9 +13,12 @@ RUN composer install --no-scripts --no-autoloader --no-dev
 COPY . /var/www
 
 RUN chown -R www-data:www-data \
-        /var/www/storage \
-        /var/www/bootstrap/cache
+        /var/www
         
  RUN composer dump-autoload --optimize 
+ 
+ RUN chown -R www-data:www-data \
+        /var/www/storage \
+        /var/www/bootstrap/cache
 
 RUN mv .env.prod .env
