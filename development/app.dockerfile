@@ -8,9 +8,9 @@ RUN docker-php-ext-install pdo_mysql
 
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
-RUN composer install --no-scripts --no-autoloader --no-dev
-
 COPY . /var/www
+
+RUN composer install --no-scripts --no-autoloader --no-dev
 
 RUN composer dump-autoload --optimize 
 
